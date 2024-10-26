@@ -90,7 +90,7 @@ workers: {}
 
 envFrom:
   - configMapRef:
-      name: picasso-backend-config
+      name: picasso-backend-configmap
   - secretRef:
       name: picasso-backend-secret
   - secretRef:
