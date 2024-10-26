@@ -1,6 +1,6 @@
 import express from 'express';
 import Logger from '../common/logger.js';
-import {initTaskProcessor, processTask} from './taskProcessor.js';
+import {initTaskProcessor} from './taskProcessor.js';
 import Config from "../common/сonfig.js";
 import createDatabase from "../database/index.js";
 import sequelizeConfig from "../common/sequelize-config.js";
