@@ -6,20 +6,24 @@ const logger = Logger.child({ module: 'amqpService.js' });
 
 let connection;
 let channels = {};
+let isConnected = false;
 
 export async function initRabbitMQ() {
     if (connection) return connection;
 
     try {
         connection = await amqp.connect(Config.rabbitmq.url);
+        isConnected = true;
         logger.info('RabbitMQ connection established');
 
         connection.on('error', (error) => {
+            isConnected = false;
             logger.error('RabbitMQ connection error:', error);
             setTimeout(initRabbitMQ, 5000);
         });
 
         connection.on('close', () => {
+            isConnected = false;
             logger.info('RabbitMQ connection closed, reconnecting...');
             setTimeout(initRabbitMQ, 5000);
         });
@@ -68,6 +72,6 @@ export async function closeConnection() {
     }
 }
 
-export function getConnection() {
-    return connection;
+export function isRabbitConnected() {
+    return isConnected;
 }
