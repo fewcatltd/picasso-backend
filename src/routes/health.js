@@ -5,7 +5,7 @@ import checkDbConnection from "../middlewares/checkDbConnection.js";
 
 const router = express.Router();
 
-router.get('/readness', async (req, res) => {
+router.get('/readiness', async (req, res) => {
     res.send('Ok');
 });
 
