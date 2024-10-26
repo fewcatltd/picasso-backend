@@ -6,13 +6,13 @@ class Config {
 
     static get worker() {
         return {
-            port: process.env.WORKER_PORT || 3002,
+            port: process.env.WORKER_PORT || 3000,
             maxConcurrentTasks: process.env.WORKER_MAX_CONCURRENT_TASKS || 50
         }
     }
     static get rabbitmq() {
         return {
-            url: process.env.RABBITMQ_URL || 'amqp://admin:password@localhost:9000/',
+            url: process.env.RABBITMQ_URL || 'amqp://picasso:picasso@localhost:5672/',
             queueName: process.env.RABBITMQ_QUEUE_NAME || 'gifQueue',
             prefetch: process.env.RABBITMQ_PREFETCH || 50
         }

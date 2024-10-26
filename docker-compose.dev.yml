@@ -19,6 +19,17 @@ services:
     command: redis-server
     volumes:
       - cache:/data
+  amqp:
+    container_name: picasso-rabbitmq
+    image: rabbitmq:3.9.9-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: picasso
+      RABBITMQ_DEFAULT_PASS: picasso
+    volumes:
+      - ./.dev/rabbitmq:/var/lib/rabbitmq
 volumes:
   cache:
     driver: local

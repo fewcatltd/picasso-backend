@@ -12,7 +12,7 @@ router.get(
             const {limit = 10, offset = 0, sort = 'desc'} = req.query
 
             const where = {
-                s3url: {[Op.not]: null},
+                s3Url: {[Op.not]: null},
             };
 
             if (req.query.startDate || req.query.endDate) {
