@@ -9,5 +9,3 @@ COPY . .
 
 EXPOSE 3000
 
-RUN ls -la
-CMD ["npm", "run", "production"]
