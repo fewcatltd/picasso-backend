@@ -42,7 +42,7 @@ async function startWorkerServer() {
         });
 
     const server = createServer(app);
-    server.listen(PORT, HOST, () => {
+    server.listen(PORT, () => {
         logger.info(`Server is running on port ${PORT}, host ${HOST}`);
     });
 
