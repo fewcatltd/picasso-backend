@@ -1,6 +1,6 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import Config from '../common/Config.js';
-import Logger from '../common/Logger.js';
+import Config from '../common/сonfig.js';
+import Logger from '../common/logger.js';
 import { promisify } from 'util';
 import { pipeline } from 'stream';
 

@@ -4,7 +4,7 @@ import { createServer } from 'http';
 import configureMiddleware from './middlewares/index.js';
 import configureRoutes from './routes/index.js';
 import errorHandler from 'error-handler-json';
-import Logger from './common/Logger.js';
+import Logger from './common/logger.js';
 import createDatabase from './database/index.js';
 import sequelizeConfig from './common/sequelize-config.js';
 

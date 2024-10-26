@@ -1,4 +1,4 @@
-import Config from './config.js'
+import Config from './сonfig.js'
 
 /** @type {import('sequelize').Options} */
 const sequelizeConfig = {

@@ -1,6 +1,6 @@
 import express from 'express';
 import gifService from '../services/gifService.js';
-import Logger from '../common/Logger.js';
+import Logger from '../common/logger.js';
 
 const logger = Logger.child({ module: 'imageRouter.js' });
 const router = express.Router();

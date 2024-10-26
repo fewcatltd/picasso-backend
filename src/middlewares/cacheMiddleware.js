@@ -1,5 +1,5 @@
 import hash from 'object-hash'
-import Logger from '../common/Logger.js'
+import Logger from '../common/logger.js'
 
 const logger = Logger.child({module: 'cacheMiddleware.js'})
 const getKey = (req) => {

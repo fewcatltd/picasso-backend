@@ -1,8 +1,8 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import Config from '../common/Config.js';
+import Config from '../common/сonfig.js';
 import s3Utils from '../utils/s3Utils.js';
-import Logger from '../common/Logger.js';
+import Logger from '../common/logger.js';
 import {v4 as uuidv4} from 'uuid';
 
 const logger = Logger.child({module: 'gifService.js'});
