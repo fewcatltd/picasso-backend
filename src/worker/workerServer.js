@@ -1,7 +1,6 @@
 import express from 'express';
 import Logger from '../common/logger.js';
 import {initTaskProcessor} from './taskProcessor.js';
-import Config from "../common/сonfig.js";
 import createDatabase from "../database/index.js";
 import sequelizeConfig from "../common/sequelize-config.js";
 import {createServer} from "http";
@@ -15,7 +14,8 @@ const apiMetrics = createRequire(import.meta.url)("prometheus-api-metrics");
 
 const logger = Logger.child({module: 'workerServer.js'});
 const app = express();
-const port = Config.worker.port || 3002;
+const PORT = process.env.PORT || 3001;
+const HOST = process.env.HOST || '0.0.0.0';
 
 async function startWorkerServer() {
     const db = await createDatabase(sequelizeConfig);
@@ -34,16 +34,16 @@ async function startWorkerServer() {
         checkDbConnection,
         checkRabbitMqConnection,
         (req, res) => {
-            res.status(200).send('OK');
+            res.send('OK');
         });
     app.get('/health/readiness',
         (req, res) => {
-            res.status(200).send('OK');
+            res.send('OK');
         });
 
     const server = createServer(app);
-    server.listen(port, '0.0.0.0', () => {
-        logger.info(`Server is running on port ${port}, host 0.0.0.0`);
+    server.listen(PORT, HOST, () => {
+        logger.info(`Server is running on port ${PORT}, host ${HOST}`);
     });
 
     gracefulShutdown(server, async () => {
