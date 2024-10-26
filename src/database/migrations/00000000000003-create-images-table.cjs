@@ -52,6 +52,17 @@ module.exports = {
                     defaultValue: queryInterface.sequelize.literal('NOW()'),
                 },
             },
+            {
+                indexes: [
+                    {
+                        fields: ['created_at', 'format', 'width', 'height'],
+                    },
+                    {fields: ['created_at']},
+                    {fields: ['width']},
+                    {fields: ['height']},
+                    {fields: ['format']},
+                ],
+            }
         )
     },
 
