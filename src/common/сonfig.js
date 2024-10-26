@@ -3,6 +3,20 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 class Config {
+
+    static get worker() {
+        return {
+            port: process.env.WORKER_PORT || 3002,
+            maxConcurrentTasks: process.env.WORKER_MAX_CONCURRENT_TASKS || 50
+        }
+    }
+    static get rabbitmq() {
+        return {
+            url: process.env.RABBITMQ_URL || 'amqp://admin:password@localhost:9000/',
+            queueName: process.env.RABBITMQ_QUEUE_NAME || 'gifQueue',
+            prefetch: process.env.RABBITMQ_PREFETCH || 50
+        }
+    }
     static get redis() {
         return {
             URL: process.env.REDIS_URL || 'redis://localhost:6379'

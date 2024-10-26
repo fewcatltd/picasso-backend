@@ -4,10 +4,10 @@ import Config from './сonfig.js'
 const sequelizeConfig = {
   ...Config.database,
   pool: {
-    max: Number(process.env.DB_POOL_MAX) || 5,
+    max: Number(process.env.DB_POOL_MAX) || 100,
     min: 0,
     idle: 10000,
-    acquire: 60000,
+    acquire: 20000,
   },
   dialect: 'postgres',
   define: {

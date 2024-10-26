@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    const images = await gifService.createGifImages(req.app.locals.db);
-    res.json(images);
+    const gifs = await gifService.pushGifsToQueue();
+    res.json(gifs);
   } catch (error) {
     logger.error('Error creating image', error);
     res.status(500).json({ error: 'Failed to create image' });
@@ -17,9 +17,9 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const image = await gifService.getImageById(req.app.locals.db, req.params.id);
+    const {Image} = req.app.locals.db.sequelize.models;
+    const image = await Image.findByPk(req.params.id);
     if (!image) {
-
       return res.status(404).json({ error: 'Image not found' });
     }
     res.json(image);

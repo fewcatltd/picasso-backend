@@ -86,7 +86,22 @@ deployment:
     - name: http
       port: 80
 
-workers: {}
+workers:
+  image-worker:
+    replicaCount: 1
+    command: "npm run start:worker"
+    resources:
+      limits:
+        cpu: 150m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 50Mi
+    envFrom:
+      - configMapRef:
+          name: image-worker-configmap
+      - secretRef:
+          name: db-secret
 
 envFrom:
   - configMapRef:

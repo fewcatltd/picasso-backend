@@ -1,33 +1,32 @@
 import express from 'express';
 import Redis from 'ioredis';
-import { createServer } from 'http';
+import {createServer} from 'http';
 import configureMiddleware from './middlewares/index.js';
 import configureRoutes from './routes/index.js';
 import errorHandler from 'error-handler-json';
 import Logger from './common/logger.js';
 import createDatabase from './database/index.js';
 import sequelizeConfig from './common/sequelize-config.js';
+import Config from "./common/сonfig.js";
+import {closeConnection, initRabbitMQ} from "./services/amqpService.js";
+import gracefulShutdown from "./common/gracefulShutdown.js";
 
-const logger = Logger.child({ module: 'app.js' });
-
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-    retryStrategy(times) {
-        return Math.min(times * 2000, 10000);
-    }
-});
-redis.on('error', (err) => {
-    logger.error('Redis error:', err);
-    //TODO: send alert to monitoring system
-});
+const logger = Logger.child({module: 'app.js'});
 
 const initApp = async () => {
     try {
-        // Дожидаемся завершения асинхронной инициализации базы данных
-        const db = await createDatabase(sequelizeConfig, redis);
+        const redis = new Redis(Config.redis.url, {
+            retryStrategy(times) {
+                return Math.min(times * 2000, 10000);
+            }
+        });
+        redis.on('error', (err) => logger.error('Redis error:', err));
 
-        // Проверка соединения с базой данных
+        const db = await createDatabase(sequelizeConfig, redis);
         await db.sequelize.authenticate();
         logger.info('Database connection has been established successfully.');
+
+        await initRabbitMQ();
 
         const app = express();
         app.locals.redis = redis;
@@ -46,22 +45,13 @@ const initApp = async () => {
             logger.info(`Server is running on port ${PORT}, host ${HOST}`);
         });
 
-        process.on('SIGTERM', async () => {
-            logger.info('Received SIGTERM, shutting down gracefully...');
-            server.close(async () => {
-                logger.info('Server closed.');
-                if (redis.status === 'ready') {
-                    await redis.quit(); // Закрываем соединение Redis
-                    logger.info('Redis connection closed.');
-                }
-                process.exit(0);
-            });
-
-            setTimeout(() => {
-                logger.error('Could not close connections in time, forcefully shutting down.');
-                process.exit(1);
-            }, 10000);
-        });
+        gracefulShutdown(server, async () => {
+            if (redis.status === 'ready') {
+                await redis.quit();
+            }
+            await db.sequelize.close();
+            await closeConnection();
+        })
 
         process.on('uncaughtException', (err) => {
             logger.error('Uncaught Exception:', err);

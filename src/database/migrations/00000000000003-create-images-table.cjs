@@ -8,17 +8,38 @@ module.exports = {
             },
             {
                 id: {
-                    type: DataTypes.STRING(256),
+                    type: DataTypes.UUID(),
                     primaryKey: true,
                     allowNull: false,
-                },
-                url: {
-                    type: DataTypes.STRING(256),
-                    allowNull: true,
+                    defaultValue: queryInterface.sequelize.literal('uuid_generate_v4()'),
                 },
                 title: {
                     type: DataTypes.STRING(256),
                     allowNull: false,
+                },
+                giphy_id: {
+                    type: DataTypes.STRING(64),
+                    allowNull: false,
+                },
+                width: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false,
+                },
+                height: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false,
+                },
+                format: {
+                    type: DataTypes.STRING(4),
+                    allowNull: false,
+                },
+                type: {
+                    type: DataTypes.STRING(128),
+                    allowNull: false,
+                },
+                s3_url: {
+                    type: DataTypes.STRING(256),
+                    allowNull: true,
                 },
                 created_at: {
                     type: DataTypes.DATE,
