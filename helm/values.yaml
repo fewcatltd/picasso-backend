@@ -88,6 +88,7 @@ deployment:
 
 workers:
   image-worker:
+    createService: true
     replicaCount: 1
     command: "npm run start:worker"
     resources:
