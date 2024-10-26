@@ -51,7 +51,7 @@ jobs:
       with:
         token: ${{ secrets.DO_TOKEN }}
     - name: Setup kubernetes cluster
-      run: doctl kubernetes cluster kubeconfig save 37ca721f-7dac-4eb4-8c43-1824c5d1278e
+      run: doctl kubernetes cluster kubeconfig save ${{ vars.KUBE_CLUSTER_ID }}
     - name: Deploy to DigitalOcean Kubernetes
       run: |
         if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
