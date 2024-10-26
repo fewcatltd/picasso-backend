@@ -21,7 +21,7 @@ class Config {
 
     static get giphy() {
         return {
-            apiKey: process.env.GIPHY_API_KEY || 'xgcnvYuqk4vP1WQQtWPz6F1A0B4WHHdA',
+            apiKey: process.env.GIPHY_API_KEY,
             url: process.env.GIPHY_URL || 'https://api.giphy.com/v1',
         }
     }
