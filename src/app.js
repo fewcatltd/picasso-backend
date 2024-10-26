@@ -6,7 +6,7 @@ import configureRoutes from './routes/index.js';
 import errorHandler from 'error-handler-json';
 import Logger from './common/Logger.js';
 import createDatabase from './database/index.js';
-import sequelizeConfig from "./common/sequelize-config.js";
+import sequelizeConfig from './common/sequelize-config.js';
 
 const logger = Logger.child({ module: 'app.js' });
 
