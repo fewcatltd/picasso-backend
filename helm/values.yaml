@@ -92,8 +92,8 @@ workers:
     command: "npm run start:worker"
     resources:
       limits:
-        cpu: 150m
-        memory: 256Mi
+        cpu: 1000m
+        memory: 1024Mi
       requests:
         cpu: 50m
         memory: 50Mi
