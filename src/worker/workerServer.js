@@ -31,12 +31,12 @@ async function startWorkerServer() {
     app.use(apiMetrics());
 
     app.get('/health/liveness',
+        checkDbConnection,
+        checkRabbitMqConnection,
         (req, res) => {
             res.status(200).send('OK');
         });
     app.get('/health/readiness',
-        checkDbConnection,
-        checkRabbitMqConnection,
         (req, res) => {
             res.status(200).send('OK');
         });
