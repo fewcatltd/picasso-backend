@@ -6,16 +6,7 @@ on:
     branches: [main, stage]
 
 jobs:
-  lint:
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v3
-    - name: Install dependencies
-      run: npm i
-#    - name: Call lint
-#      run: npm run lint
   build:
-    needs: [lint]
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
