@@ -1,0 +1,101 @@
+namespace: production
+
+replicaCount: 1
+
+image:
+  repository: ""
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets:
+  - name: "do-registry"
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "80"
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  create: true
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /health/liveness
+    port: http
+readinessProbe:
+  httpGet:
+    path: /health/readiness
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 2000
+  targetMemoryUtilizationPercentage: 2000
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+deployment:
+  ports:
+    - name: http
+      port: 80
+
+workers: {}
+
+envFrom:
+  - configMapRef:
+      name: picasso-backend-config
+  - secretRef:
+      name: picasso-backend-secret
+  - secretRef:
+      name: db-secret
+  - secretRef:
+      name: redis-secret
+  - secretRef:
+      name: rabbitmq-secret

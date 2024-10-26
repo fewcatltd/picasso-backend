@@ -20,7 +20,7 @@ const s3 = new S3Client({
 
 async function uploadToS3(gifResponse, gifKey, contentLength, contentType, t, Image, imageId) {
   await Promise.race([
-    streamPipeline(
+    streamPipeline( //TODO: бьяснить почему именно пайплайн
       gifResponse.data,
       async (source) => {
         await s3.send(

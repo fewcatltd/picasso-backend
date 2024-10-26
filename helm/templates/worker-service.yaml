@@ -1,0 +1,28 @@
+
+{{- $root := . -}}
+
+{{- range $workerName, $worker := .Values.workers }}
+{{- if $worker.createService }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "helm.fullname" $ }}-{{ $workerName }}-svc
+  labels:
+    {{- include "helm.labels" $ | nindent 4 }}
+    worker: {{ $workerName }}
+    app-type: worker
+    app.kubernetes.io/name: {{ include "helm.fullname" $root }}-{{ $workerName }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    worker: {{ $workerName }}
+    app-type: worker
+    app.kubernetes.io/name: {{ include "helm.fullname" $root }}-{{ $workerName }}
+---
+{{- end }}
+{{- end }}

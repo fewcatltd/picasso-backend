@@ -1,0 +1,55 @@
+# helm/templates/worker-deployment.yaml
+
+{{- $root := . -}}
+
+{{- range $workerName, $worker := .Values.workers }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" $root }}-{{ $workerName }}
+  labels:
+    worker: {{ $workerName }}
+    app-type: worker
+    app.kubernetes.io/name: {{ include "helm.fullname" $root }}-{{ $workerName }}
+spec:
+  replicas: {{ $worker.replicaCount }}
+  selector:
+    matchLabels:
+      worker: {{ $workerName }}
+      app-type: worker
+      app.kubernetes.io/name: {{ include "helm.fullname" $root }}-{{ $workerName }}
+  template:
+    metadata:
+      labels:
+        worker: {{ $workerName }}
+        app-type: worker
+        app.kubernetes.io/name: {{ include "helm.fullname" $root }}-{{ $workerName }}
+    spec:
+      serviceAccountName: {{ include "helm.serviceAccountName" $root }}
+      containers:
+      - name: {{ $workerName }}
+        image: "{{ $root.Values.image.repository }}:{{ $root.Values.image.tag | default $root.Chart.AppVersion }}"
+        imagePullPolicy: {{ $root.Values.image.pullPolicy }}
+        command: ["sh", "-c"]
+        args: ["{{ $worker.command }}"]
+        ports:
+          - name: http
+            containerPort: 80
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+        resources:
+          {{- toYaml $worker.resources | nindent 12 }}
+        {{- with $worker.envFrom }}
+        envFrom:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+---
+{{- end }}
+

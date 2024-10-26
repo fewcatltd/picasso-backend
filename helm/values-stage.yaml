@@ -1,0 +1,119 @@
+namespace: stage
+
+replicaCount: 1
+
+image:
+  repository: ""
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets:
+  - name: "do-registry"
+
+nameOverride: "stage"
+fullnameOverride: "tma-platform-stage"
+
+serviceAccount:
+  create: false
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/metrics"
+    prometheus.io/port: "80"
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+deployment:
+  ports:
+    - name: http
+      port: 80
+    - name: metrics
+      port: 3000
+
+service:
+  create: true
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: metrics
+      port: 3000
+      targetPort: metrics
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4096Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /health/liveness
+    port: http
+readinessProbe:
+  httpGet:
+    path: /health/readiness
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 2000
+  targetMemoryUtilizationPercentage: 2000
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+workers:
+  worker-telegram-notifier:
+    replicaCount: 1
+    command: "npm run basic-worker:telegram-notifier"
+    resources:
+        limits:
+            cpu: 150m
+            memory: 256Mi
+        requests:
+            cpu: 50m
+            memory: 50Mi
+    envFrom:
+      - configMapRef:
+          name: worker-telegram-notifier-configmap
+      - secretRef:
+          name: stage-db-secret
+
+envFrom:
+  - configMapRef:
+      name: stage-tma-platform-configmap
+  - secretRef:
+      name: stage-tma-platform-secret
+  - secretRef:
+      name: stage-db-secret
+  - secretRef:
+      name: stage-redis-secret

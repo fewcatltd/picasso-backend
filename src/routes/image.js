@@ -19,6 +19,7 @@ router.get('/:id', async (req, res) => {
   try {
     const image = await gifService.getImageById(req.app.locals.db, req.params.id);
     if (!image) {
+
       return res.status(404).json({ error: 'Image not found' });
     }
     res.json(image);
