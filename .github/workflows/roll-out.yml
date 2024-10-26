@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
+    - name: Disable BuildKit
+      run: export DOCKER_BUILDKIT=0
     - name: Docker Login
       uses: docker/login-action@v2.2.0
       with:
@@ -17,7 +19,7 @@ jobs:
         username: ${{ secrets.DO_TOKEN }}
         password: ${{ secrets.DO_TOKEN }}
     - name: Building docker image
-      run: docker buildx build --no-cache --tag ${{ vars.DOCKER_REGISTRY }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
+      run: docker build --no-cache --tag ${{ vars.DOCKER_REGISTRY }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
     - name: Pushing docker image
       run: docker push ${{ vars.DOCKER_REGISTRY }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
 
