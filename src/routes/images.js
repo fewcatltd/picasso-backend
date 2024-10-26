@@ -1,5 +1,6 @@
 import express from 'express'
 import Logger from "../common/logger.js";
+import {Op} from "sequelize";
 
 const router = express.Router()
 const logger = Logger.child({module: 'imagesRouter.js'});
@@ -10,7 +11,9 @@ router.get(
             const {Image} = req.app.locals.db.sequelize.models;
             const {limit = 10, offset = 0, sort = 'desc'} = req.query
 
-            const where = {};
+            const where = {
+                s3url: {[Op.not]: null},
+            };
 
             if (req.query.startDate || req.query.endDate) {
                 where.createdAt = {
