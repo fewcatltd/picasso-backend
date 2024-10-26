@@ -4,17 +4,18 @@ on:
     branches: [main, stage]
   pull_request:
     branches: [main, stage]
+
 jobs:
-#  lint:
-#    runs-on: ubuntu-22.04
-#    steps:
-#    - uses: actions/checkout@v3
-#    - name: Install dependencies
-#      run: npm i
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: npm i
 #    - name: Call lint
 #      run: npm run lint
   build:
-#    needs: [lint]
+    needs: [lint]
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
@@ -25,9 +26,12 @@ jobs:
         username: ${{ secrets.DO_TOKEN }}
         password: ${{ secrets.DO_TOKEN }}
     - name: Building docker image
-      run: docker build --no-cache -t ${{ vars.DOCKER_REGISTRY }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
+      run: |
+        docker build --no-cache \
+          -t ${{ vars.DOCKER_REGISTRY }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }} .
     - name: Pushing docker image
       run: docker push ${{ vars.DOCKER_REGISTRY }}/${{ vars.REPOSITORY_NAME }}:${{ github.sha }}
+
   roll-out:
     needs: build
     runs-on: ubuntu-22.04
