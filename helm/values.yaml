@@ -1,4 +1,4 @@
-namespace: production
+namespace: default
 
 replicaCount: 1
 
