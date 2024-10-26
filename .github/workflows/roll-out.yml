@@ -14,7 +14,7 @@ jobs:
 #    - name: Call lint
 #      run: npm run lint
   build:
-    needs: [lint]
+#    needs: [lint]
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
