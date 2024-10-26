@@ -19,7 +19,7 @@ class Config {
     }
     static get redis() {
         return {
-            URL: process.env.REDIS_URL || 'redis://localhost:6379'
+            url: process.env.REDIS_URL || 'redis://localhost:6379'
         }
     }
 
