@@ -102,6 +102,8 @@ workers:
           name: image-worker-configmap
       - secretRef:
           name: db-secret
+      - secretRef:
+          name: rabbitmq-secret
 
 envFrom:
   - configMapRef:
