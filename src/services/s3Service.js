@@ -26,6 +26,7 @@ export async function streamToS3(gifData) {
         Body: response.data,
         ContentType: response.headers['content-type'],
         ContentLength: response.headers['content-length'],
+        ACL: 'public-read',
     };
 
     await s3Client.send(new PutObjectCommand(uploadParams));
