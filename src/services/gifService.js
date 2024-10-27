@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Config from "../common/сonfig.js";
 import {sendToQueue} from "./amqpService.js";
+import logger from "../common/logger.js";
 
 async function getRandomGif() {
     const response = await axios.get(`${Config.giphy.url}/gifs/random?api_key=${Config.giphy.apiKey}`);
@@ -13,7 +14,8 @@ async function getRandomGif() {
 async function pushGifsToQueue() {
     const giphyData = await getRandomGif();
     if (!giphyData.images) {
-        throw new Error('Image URL is missing in the Giphy response');
+        logger.child({module: 'gifService.js'}).error('Invalid response from Giphy API');
+        return []
     }
 
     const gifs = Object.keys(giphyData.images).flatMap((key) => {
