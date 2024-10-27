@@ -14,7 +14,6 @@ export async function initRabbitMQ() {
     try {
         connection = await amqp.connect(Config.rabbitmq.url);
         isConnected = true;
-        logger.info('RabbitMQ connection established');
 
         connection.on('error', (error) => {
             isConnected = false;

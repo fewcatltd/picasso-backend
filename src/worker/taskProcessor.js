@@ -49,7 +49,6 @@ async function processTask(channel, msg, db) {
             logger.error(`Failed to process GIF`, error);
             errorCounter.inc();
             channel.nack(msg, false, true);
-
         }
     });
 }

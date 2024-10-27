@@ -68,9 +68,9 @@ class Config {
 
     static get microservices() {
         return {
-            serviceLayer: {
-                url: process.env.SERVICE_LAYER_URL || 'http://localhost:3000',
-                origin: process.env.SERVICE_LAYER_ORIGIN || '*'
+            apiGateway: {
+                internalUrl: process.env.API_GATEWAY_INTERNAL_URL || 'http://localhost:3000',
+                externalUrl: process.env.API_GATEWAY_EXTERNAL_URL || 'http://localhost:3000',
             }
         }
     }
